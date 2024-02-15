@@ -1,17 +1,30 @@
 import React, { useState } from "react";
+import { Todo, UpdateTodoFunction } from "../types/types";
+import { Col, Container, Row } from "reactstrap";
+import TodoItem from "./TodoItem";
 
-export default function TodoTable() {
+interface Props {
+  todoList: Todo[];
+  editYn: boolean;
+  onUpdate: UpdateTodoFunction;
+}
+
+export default function TodoTable({ todoList, editYn, onUpdate }: Props) {
   const [isChecked, setIsChecked] = useState(false);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
 
+  if (todoList.length === 0) {
+    return <div>할 일을 추가해주세요.</div>;
+  }
+
   return (
-    <table className="table">
-      <tbody>
-        <tr>
-          <td className="text-center">
+    <Container>
+      {todoList.map((todo: Todo, index) => (
+        <Row key={index}>
+          <Col className="col-1">
             <div className="custom-control custom-checkbox mb-3">
               <input
                 className="custom-control-input"
@@ -20,9 +33,11 @@ export default function TodoTable() {
               />
               <label className="custom-control-label" htmlFor="checkYn" />
             </div>
-          </td>
-          <td>Andrew Mike</td>
-          <td className="td-actions text-right">
+          </Col>
+          <Col className="col text-left">
+            <TodoItem key={todo.id} todo={todo} onUpdate={onUpdate} />
+          </Col>
+          <Col className="col-3 text-right" hidden={!editYn}>
             <button
               type="button"
               rel="tooltip"
@@ -32,18 +47,9 @@ export default function TodoTable() {
             >
               <i className="ni ni-fat-remove pt-1" />
             </button>
-
-            <button
-              type="button"
-              className="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </Col>
+        </Row>
+      ))}
+    </Container>
   );
 }
