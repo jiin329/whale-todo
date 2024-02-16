@@ -28,6 +28,15 @@ export default function TodoList() {
   };
 
   const onUpdateTodo = (id: number, newText: string) => {
+    if (newText === "") {
+      const updatedTodos = todoList
+        .filter((todo) => todo.id !== id)
+        .map((todo, index) => ({
+          ...todo,
+          id: index,
+        }));
+      return setTodoList(updatedTodos);
+    }
     const updatedTodos = todoList.map((todo) => {
       if (todo.id === id) {
         return { ...todo, text: newText };

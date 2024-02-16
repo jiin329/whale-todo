@@ -20,6 +20,10 @@ export default function TodoTable({ todoList, editYn, onUpdate }: Props) {
     return <div>할 일을 추가해주세요.</div>;
   }
 
+  const onRemoveTodo = (id: number) => {
+    onUpdate(id, "");
+  };
+
   return (
     <Container>
       {todoList.map((todo: Todo, index) => (
@@ -42,6 +46,7 @@ export default function TodoTable({ todoList, editYn, onUpdate }: Props) {
               type="button"
               rel="tooltip"
               className="btn btn-danger btn-icon btn-sm "
+              onClick={() => onRemoveTodo(todo.id)}
               data-original-title=""
               title=""
             >
