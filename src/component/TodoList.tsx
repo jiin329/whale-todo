@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import TodoTable from "./TodoTable";
 import { Todo } from "../types/types";
+import Alerts from "./Alerts";
 
 export default function TodoList() {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [input, setInput] = useState("");
   const [editYn, setEditYn] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const storedTodos = localStorage.getItem("todoList");
@@ -20,6 +22,7 @@ export default function TodoList() {
   }, [todoList]);
 
   const addTodo = () => {
+    if (editYn) setEditYn(false);
     const newTodos = [
       ...todoList,
       { id: todoList.length, text: input, completed: false },
@@ -43,6 +46,10 @@ export default function TodoList() {
       }
       return todo;
     });
+    // console.log("todoList", todoList);
+    // console.log("updatedTodos", updatedTodos);
+    // console.log(todoList == updatedTodos);
+
     setTodoList(updatedTodos);
   };
 
@@ -90,6 +97,7 @@ export default function TodoList() {
           onUpdate={onUpdateTodo}
         />
       </div>
+      <Alerts isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 }

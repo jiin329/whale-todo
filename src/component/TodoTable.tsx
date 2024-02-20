@@ -41,7 +41,7 @@ export default function TodoTable({ todoList, editYn, onUpdate }: Props) {
           <Col className="col text-left">
             <TodoItem key={todo.id} todo={todo} onUpdate={onUpdate} />
           </Col>
-          <Col className="col-3 text-right" hidden={!editYn}>
+          <Col className="col-1 text-right" hidden={!editYn}>
             <button
               type="button"
               rel="tooltip"
