@@ -1,21 +1,24 @@
-import React, { useState } from "react";
-import { Todo, UpdateTodoFunction } from "../types/types";
+import {
+  CheckboxHandlerFunction,
+  Todo,
+  UpdateTodoFunction,
+} from "../types/types";
 import { Col, Container, Row } from "reactstrap";
 import TodoItem from "./TodoItem";
 
 interface Props {
   todoList: Todo[];
-  editYn: boolean;
+  deleteYn: boolean;
   onUpdate: UpdateTodoFunction;
+  checkboxHandler: CheckboxHandlerFunction;
 }
 
-export default function TodoTable({ todoList, editYn, onUpdate }: Props) {
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
-  };
-
+export default function TodoTable({
+  todoList,
+  deleteYn,
+  onUpdate,
+  checkboxHandler,
+}: Props) {
   if (todoList.length === 0) {
     return <div>할 일을 추가해주세요.</div>;
   }
@@ -33,15 +36,23 @@ export default function TodoTable({ todoList, editYn, onUpdate }: Props) {
               <input
                 className="custom-control-input"
                 type="checkbox"
-                id="checkYn"
+                id={todo.id.toString()}
+                checked={todo.completed}
+                onChange={(e) => checkboxHandler(e)}
               />
-              <label className="custom-control-label" htmlFor="checkYn" />
+              <label
+                className="custom-control-label"
+                htmlFor={todo.id.toString()}
+              />
             </div>
           </Col>
-          <Col className="col text-left">
+          <Col
+            className="col text-left"
+            style={{ pointerEvents: deleteYn ? "none" : "auto" }}
+          >
             <TodoItem key={todo.id} todo={todo} onUpdate={onUpdate} />
           </Col>
-          <Col className="col-1 text-right" hidden={!editYn}>
+          <Col className="col-1 text-right" hidden={!deleteYn}>
             <button
               type="button"
               rel="tooltip"
@@ -50,7 +61,7 @@ export default function TodoTable({ todoList, editYn, onUpdate }: Props) {
               data-original-title=""
               title=""
             >
-              <i className="ni ni-fat-remove pt-1" />
+              <i className="fa fa-times pt-1" />
             </button>
           </Col>
         </Row>

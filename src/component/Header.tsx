@@ -3,13 +3,15 @@ import React, { useEffect } from "react";
 
 export default function Header() {
   return (
-    <div className="header">
+    <div className="header-contents">
       <img
-        src={`${process.env.PUBLIC_URL}/logo/todolist-logo-default.png`}
+        src={`${process.env.PUBLIC_URL}/logo/todolist-logo.png`}
         alt="logo"
         style={{ width: "200px", height: "auto" }}
       />
-      <div className="date">{new Date().toLocaleDateString()}</div>
+      <div className="date">
+        <h6 className="text-dark">{new Date().toLocaleDateString()}</h6>
+      </div>
     </div>
   );
 }

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import TodoTable from "./TodoTable";
 import { Todo } from "../types/types";
 import Alerts from "./Alerts";
+// import "App.css";
 
 export default function TodoList() {
   const [todoList, setTodoList] = useState<Todo[]>([]);
-  const [input, setInput] = useState("");
-  const [editYn, setEditYn] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [deleteYn, setDeleteYn] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [alertMsg, setAlertMsg] = useState<string>("");
 
   useEffect(() => {
     const storedTodos = localStorage.getItem("todoList");
@@ -17,40 +18,64 @@ export default function TodoList() {
   }, []);
 
   useEffect(() => {
-    //todo::      todoList.filter((todo: Todo) => todo.text !== "")
     localStorage.setItem("todoList", JSON.stringify(todoList));
   }, [todoList]);
 
   const addTodo = () => {
-    if (editYn) setEditYn(false);
-    const newTodos = [
-      ...todoList,
-      { id: todoList.length, text: input, completed: false },
-    ];
-    setTodoList(newTodos);
+    if (deleteYn) setDeleteYn(false);
+    if (todoList.length === 30) {
+      setAlertMsg("할일은 30개 이상 만들 수 없습니다.");
+      return setIsOpen(true);
+    }
+    onUpdateTodo(todoList.length, "");
+  };
+
+  const removeTodo = () => {
+    if (todoList.length === 0) {
+      setAlertMsg("삭제 할 항목이 없습니다.");
+      return setIsOpen(true);
+    }
+    setDeleteYn(true);
   };
 
   const onUpdateTodo = (id: number, newText: string) => {
+    //신규
+    if (id === todoList.length) {
+      const newTodos = [
+        ...todoList,
+        { id: todoList.length, text: newText, completed: false },
+      ];
+      return setTodoList(newTodos);
+    }
+    //삭제
     if (newText === "") {
-      const updatedTodos = todoList
+      const deleteTodos = todoList
         .filter((todo) => todo.id !== id)
         .map((todo, index) => ({
           ...todo,
           id: index,
         }));
-      return setTodoList(updatedTodos);
+      if (deleteTodos.length === 0) setDeleteYn(false);
+      return setTodoList(deleteTodos);
     }
-    const updatedTodos = todoList.map((todo) => {
+    //수정
+    const updateTodos = todoList.map((todo) => {
       if (todo.id === id) {
         return { ...todo, text: newText };
       }
       return todo;
     });
-    // console.log("todoList", todoList);
-    // console.log("updatedTodos", updatedTodos);
-    // console.log(todoList == updatedTodos);
+    setTodoList(updateTodos);
+  };
 
-    setTodoList(updatedTodos);
+  const checkboxHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const updateTodos = todoList.map((todo) => {
+      if (todo.id === parseInt(e.target.id)) {
+        return { ...todo, completed: !todo.completed };
+      }
+      return todo;
+    });
+    setTodoList(updateTodos);
   };
 
   return (
@@ -59,21 +84,21 @@ export default function TodoList() {
         <button
           className="btn btn-outline-default btn-round"
           type="button"
-          onClick={addTodo}
+          onClick={() => addTodo()}
         >
           <span className="btn-inner--icon">
-            <i className="ni ni-fat-add" />
+            <i className="fa fa-plus m-1" />
           </span>
           <span className="btn-inner--text">추가하기</span>
         </button>
-        {editYn ? (
+        {deleteYn ? (
           <button
             className="btn btn-success"
             type="button"
-            onClick={() => setEditYn(false)}
+            onClick={() => setDeleteYn(false)}
           >
             <span className="btn-inner--icon">
-              <i className="ni ni-check-bold" />
+              <i className="ni ni-check-bold m-1" />
             </span>
             <span className="btn-inner--text">완료하기</span>
           </button>
@@ -81,10 +106,10 @@ export default function TodoList() {
           <button
             className="btn btn-outline-danger"
             type="button"
-            onClick={() => setEditYn(true)}
+            onClick={removeTodo}
           >
             <span className="btn-inner--icon">
-              <i className="ni ni-fat-remove" />
+              <i className="fa fa-trash m-1" />
             </span>
             <span className="btn-inner--text">삭제하기</span>
           </button>
@@ -93,11 +118,12 @@ export default function TodoList() {
       <div className="mt-3">
         <TodoTable
           todoList={todoList}
-          editYn={editYn}
+          deleteYn={deleteYn}
           onUpdate={onUpdateTodo}
+          checkboxHandler={checkboxHandler}
         />
       </div>
-      <Alerts isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Alerts isOpen={isOpen} setIsOpen={setIsOpen} msg={alertMsg} />
     </div>
   );
 }

@@ -9,10 +9,9 @@ interface Props {
 export default function TodoItem({ todo, onUpdate }: Props) {
   const [isEditing, setIsEditing] = useState(true);
   const [editValue, setEditValue] = useState(todo.text);
-  const [isNewTodo, setIsNewTodo] = useState(false);
 
   useEffect(() => {
-    if (todo.text === "") setIsNewTodo(true);
+    setEditValue(todo.text);
   }, [todo]);
 
   const handleDoubleClick = () => {
@@ -34,13 +33,7 @@ export default function TodoItem({ todo, onUpdate }: Props) {
   };
 
   const handleUpdate = () => {
-    if (!isNewTodo && editValue === "") {
-      setEditValue(todo.text);
-      onUpdate(todo.id, todo.text);
-    } else {
-      onUpdate(todo.id, editValue);
-    }
-    setIsNewTodo(false);
+    onUpdate(todo.id, editValue);
     setIsEditing(false);
   };
 
@@ -55,7 +48,7 @@ export default function TodoItem({ todo, onUpdate }: Props) {
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}
-            style={{ width: "85%" }}
+            style={{ width: "80%" }}
             placeholder="내용을 입력하세요."
             autoFocus
           />
@@ -71,7 +64,7 @@ export default function TodoItem({ todo, onUpdate }: Props) {
           </button>
         </div>
       ) : (
-        <span>{todo.text}</span>
+        <span>{todo.completed ? <del>{todo.text}</del> : todo.text}</span>
       )}
     </div>
   );
