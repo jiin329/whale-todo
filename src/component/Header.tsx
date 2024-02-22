@@ -10,7 +10,10 @@ export default function Header() {
         style={{ width: "200px", height: "auto" }}
       />
       <div className="date">
-        <h6 className="text-dark">{new Date().toLocaleDateString()}</h6>
+        <h6 className="text-dark">
+          {new Date().getFullYear()}년 {new Date().getMonth()}월{" "}
+          {new Date().getDate()}일
+        </h6>
       </div>
     </div>
   );

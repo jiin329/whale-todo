@@ -79,7 +79,7 @@ export default function TodoList() {
   };
 
   return (
-    <div>
+    <div className="body-contents">
       <div>
         <button
           className="btn btn-outline-default btn-round"
@@ -115,7 +115,7 @@ export default function TodoList() {
           </button>
         )}
       </div>
-      <div className="mt-3">
+      <div className="m-3">
         <TodoTable
           todoList={todoList}
           deleteYn={deleteYn}

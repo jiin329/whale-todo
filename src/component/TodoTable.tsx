@@ -28,7 +28,7 @@ export default function TodoTable({
   };
 
   return (
-    <Container>
+    <Container style={{ width: "100%" }}>
       {todoList.map((todo: Todo, index) => (
         <Row key={index}>
           <Col className="col-1">

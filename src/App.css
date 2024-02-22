@@ -27,6 +27,10 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  position: fixed;
+  text-align: center;
+  z-index: 1000;
+  width: 100%;
 }
 
 .App-link {
@@ -40,4 +44,27 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.header-contents {
+  width: 100%;
+}
+
+.footer-contents {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: white; /* 예시 색상 */
+  text-align: center;
+  padding: 10px;
+  z-index: 1000;
+}
+
+.body-contents {
+  margin-bottom: 10px;
+  padding-bottom: 30px;
+
+  width: 100%;
+  /* max-height: calc(100vh - 40); */
+  overflow-y: auto;
 }

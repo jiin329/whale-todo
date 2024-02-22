@@ -14,7 +14,8 @@ export default function TodoItem({ todo, onUpdate }: Props) {
     setEditValue(todo.text);
   }, [todo]);
 
-  const handleDoubleClick = () => {
+  const handleOnClick = (checkYn: boolean) => {
+    if (checkYn) return;
     setIsEditing(true);
   };
 
@@ -38,7 +39,10 @@ export default function TodoItem({ todo, onUpdate }: Props) {
   };
 
   return (
-    <div style={{ cursor: "pointer" }} onDoubleClick={handleDoubleClick}>
+    <div
+      style={{ cursor: todo.completed ? "default" : "pointer" }}
+      onClick={() => handleOnClick(todo.completed)}
+    >
       {isEditing ? (
         <div>
           <input
