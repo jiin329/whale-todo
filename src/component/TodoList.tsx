@@ -48,7 +48,7 @@ export default function TodoList() {
       return setTodoList(newTodos);
     }
     //삭제
-    if (newText === "") {
+    if (newText === "" || newText.trim().length === 0) {
       const deleteTodos = todoList
         .filter((todo) => todo.id !== id)
         .map((todo, index) => ({
